@@ -24,35 +24,25 @@
 	
 main:	la $a0,souTextA0		# argument: string
 	jal nactiCislo			# procedura pro nacteni vtupu od uzivatele
-	nop
+	la $a0,souTextA1		# argument: string	
+	
+	jal nactiCislo			# procedura pro nacteni vtupu od uzivatele
 	move $t0,$v0
-	
-		
-	la $a0,souTextA1		# argument: string
-	jal nactiCislo			# procedura pro nacteni vtupu od uzivatele
-	nop
-	move $t1,$v0
-		
-	
 	la $a0,souTextB0		# argument: string
+	move $t1,$v0
+			
 	jal nactiCislo			# procedura pro nacteni vtupu od uzivatele
-	nop
-	move $t2,$v0		
-	
 	la $a0,souTextB1		# argument: string
+		
 	jal nactiCislo			# procedura pro nacteni vtupu od uzivatele
-	nop
-	move $t3,$v0
-
-	
+	move $t2,$v0		
 	la $a0,souTextC0		# argument: string
-	jal nactiCislo			# procedura pro nacteni vtupu od uzivatele
-	nop
-	move $t4,$v0
+	move $t3,$v0
 	
+	jal nactiCislo			# procedura pro nacteni vtupu od uzivatele
 	la $a0,souTextC1		# argument: string
 	jal nactiCislo			# procedura pro nacteni vtupu od uzivatele
-	nop
+	move $t4,$v0
 	move $t5,$v0
 
 	####################  vector U ############################
