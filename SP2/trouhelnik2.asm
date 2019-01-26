@@ -8,6 +8,8 @@
 	souTextC0: .asciiz "Zadejte souradnici C[0]:\n"
 	souTextC1: .asciiz "Zadejte souradnici C[1]:\n"	
 	
+	vysledek: .asciiz "Obsah trojuhelniku je: "
+	
 	half: .float 2.0
 	
 	.text
@@ -55,22 +57,24 @@ main:
   	
   	
   	sub $t6,$v0,$v1
-  	#ble $t6,$zero,normalizace
-  	#move $a0,$t6
-  	
-  	li $v0,2		# syscall 4 (print_str)
-  	lwc1 $f2,half
-  	mtc1 $t6,$f0
-  	cvt.s.w $f0,$f0
-  	div.s $f12,$f0,$f2
-  	
-  	
-  	
-  	
-	syscall			# zavolani syscall
-  	
-  	jal exit
+  	ble $t6,$zero,normalizace
+  	j deleni
 
+deleni:		nop
+		lwc1 $f2,half		# ulozi do $f2 hodnotu 2
+		mtc1 $t6,$f0		# ulozi obsah $t6 do coprocesoru na adresu $f0
+		cvt.s.w $f0,$f0		# prevede integer na float
+  		div.s $f12,$f0,$f2	# vydeli dva floaty
+  		j tiskVysledek		# pokracovani na proceduru ktera vytiskne vysledek
+  		
+tiskVysledek:	nop
+		la $a0,vysledek		# nacteni string retezce
+		li $v0,4		# syscall 4 (print_str)
+		syscall			# zavolani syscall
+
+		li $v0,2		# syscall 2 (print_float)
+		syscall			# zavolani syscall
+		j exit
  
 nactiCislo: 	nop
 		li $v0,4		# syscall 4 (print_str)
@@ -80,9 +84,10 @@ nactiCislo: 	nop
 		syscall			# zavolani syscall
 		jr $ra			# navrat z procedury
 		
-normalizace: 	nop
-		mul $v0,$a0,-1
-		jr $ra
+normalizace: 	nop			
+		mul $t6,$t6,-1		# pronasobi cislo -1 k dostani kladneho cisla
+		j deleni		# pokracovani ve vypoctu
+
 exit: 		nop
-		li $v0,10			# ukonceni programu
-		syscall				# syscall
+		li $v0,10		# oznameni systemu ze program bude koncit
+		syscall			# syscall
